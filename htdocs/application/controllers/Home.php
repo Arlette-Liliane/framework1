@@ -6,6 +6,5 @@ class Home extends CI_Controller{
     {
         $data["contents"] = "about";
         $this->load->view('templates/template', $data);
-
     }
 }
