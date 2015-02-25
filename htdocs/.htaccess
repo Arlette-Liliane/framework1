@@ -1,0 +1,14 @@
+# Mod Rewrite: Remove "index.php" from URI.
+<IfModule mod_rewrite.c>
+
+    RewriteBase /
+	Options +FollowSymLinks
+	RewriteEngine On
+
+
+	# Send request via index.php
+	RewriteCond %{REQUEST_FILENAME} !-f
+	#RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
