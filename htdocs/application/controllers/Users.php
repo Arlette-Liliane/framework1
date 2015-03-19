@@ -56,7 +56,7 @@ $this->load->view('login');
                 $this->input->post("surname"));
 
             if ($a) {
-                redirect("Home");
+                redirect("Users/login");
 
             }
 
@@ -67,38 +67,62 @@ $this->load->view('login');
 
     public function list_users()
     {
-        $this->template->viewdata("list_users", $this->aauth->list_users());
-        $this->template->view("Users/list_users");
+       $data['list_user'] = $this->aauth->list_users();
+        $data['contents'] = 'list_users';
+        $this->load->view("templates/template", $data);
+
+    }
+
+    public function profile()
+    {
+        $data['pro'] = $this->aauth->get_user();
+        $data['contents'] = 'profile';
+        $this->load->view("templates/template", $data);
 
     }
 
     public function update_users()
     {
-        //update venent du bouton openfile
-        if (isset($_POST["update"]) && !empty($_POST["update"])) {
+
+        //le bouton openfile renvoit un modal bootstrap qui est recuperer par ajax et affiché dans une div
+        if (isset($_POST["update"]) && !empty($_POST["update"]))
+        {
             $id = $_POST["update"];
-            $this->tables_model->set('aauth_users');
-            $users = $this->tables_model->read_where('*', array('id' => intval($id)));
-            $up["up"] = $users[0];
-            $this->load->view("Users/update_users");
+
+            $data['up'] = $this->aauth->get_user($id);
+            $data['gr'] = $this->aauth->get_user_groups($id);
+            $this->load->view("update_user", $data);
 
         }
-        //le bouton openfile renvoit un modal bootstrap qui est recuperer par ajax et affiché dans une div
-
-        if (isset($_POST["id_update"]) && !empty($_POST["id_update"])) {
-            $id = intval($_POST["id_update"]);
+        else{
+            $id = $_POST['id'];
             $email = $this->input->post('email');
-            $name = strtolower($this->input->post('name'));
-            $surname = strtolower($this->input->post("surname"));
+            $name = htmlentities($this->input->post('name'));
+            $surname = htmlentities($this->input->post("surname"));
 
-            // var_dump($arr1[1]);
-            $pass = substr($name, 0, 3) . "" . substr($surname, 0, 2);
-            $name = $this->input->post('name');
-            $surname = $this->input->post("surname");
 
             // $this->tables_model->set('aauth_users');
-            $this->aauth->update_user($id, $email, $pass, $name, $surname);
+            //echo $_POST["pass"];
+            if (isset($_POST["pass"])){
+                echo "no";
+
+                $this->aauth->update_user($id, $email, $_POST["pass"], $name, $surname);
+                if (isset($_POST['groups']))
+                    $this->aauth->add_member($id, $this->input->post('groups'));
+
+            }
+
+            else{
+                echo "yes";
+
+                $this->aauth->update_user($id, $email, $name, $surname);
+                if (isset($_POST['groups']))
+                    $this->aauth->add_member($id, $this->input->post('groups'));
+            }
+
+
         }
+
 
     }
 
@@ -106,5 +130,7 @@ $this->load->view('login');
     {
         $this->aauth->delete_user($_POST["empId"]);
     }
+
+
 
 }

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin extends Base_Controller{
+class Admin extends  CI_Controller{
 
     /**
      * Index Page for this controller.
@@ -21,6 +21,27 @@ class Admin extends Base_Controller{
     {
         $data["contents"] = "about";
         $this->load->view('templates/template', $data);
+
+    }
+
+    function add_user()
+    {
+
+        $a = $this->aauth->create_user($this->input->post("email"),
+            $this->input->post('password'),
+            $this->input->post('name'),
+            $this->input->post("surname"));
+
+        if ($a){
+            $reponse = "OK";
+            if (isset($_POST['group']))
+             $this->aauth->add_member($this->aauth->get_user_id($this->input->post("email")), $this->input->post('group'));
+        }
+
+        else
+            $reponse= "KO : ". $this->input->post('name'). ' '.$this->input->post("surname"). ' already exist';
+
+        echo json_encode(['reponse' => $reponse]);
 
     }
 }
