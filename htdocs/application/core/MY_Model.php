@@ -20,6 +20,7 @@ class MY_Model extends CI_Model {
         parent::__construct();
         //$this->load->database();
     }
+
     /**
      * inserts the data contained in the database
      * @param array $option_echap

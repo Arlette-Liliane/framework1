@@ -78,7 +78,7 @@
                             echo ($this->session->userdata('name')) ?
                                     '<li>
                                         <a href="'.site_url("Users/profile").'"> Profile</a>
-                                    </li>' : '' ?>
+                                    </li>' : ''?>
 
                     </ul>
                 </li>
@@ -86,7 +86,14 @@
                 echo ($this->aauth->is_admin($this->session->userdata('id'))) ?
                     '<li>
                                         <a href="'.site_url("Users/list_users").'"> <i class="fa fa-fw fa-power-off"></i> Users List</a>
-                                    </li>' : '' ?>
+                                    </li>' : '';
+
+
+                    echo ($this->session->userdata('name')) ?
+                    '<li>
+                                        <a href="'.site_url("Forum").'"> <i class="fa fa-fw fa-power-off"></i> Forum</a>
+                                    </li>' : ''
+ ?>
 
             </ul>
         </div>
