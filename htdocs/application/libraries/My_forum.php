@@ -88,6 +88,28 @@ class My_forum {
         return $query->result_array();
     }
 
+    public function get_category($where = FALSE, $limit = FALSE, $offset = FALSE) {
+
+        // if group_par is given
+
+        $this->CI->db->select('cat_id')
+            ->from("categories");
+        // limit
+        if ($limit) {
+
+            if ($offset == FALSE)
+                $this->CI->db->limit($limit);
+            else
+                $this->CI->db->limit($limit, $offset);
+        }
+        if ($where)
+            $this->CI->db->where('cat_name', $where);
+
+        $query = $this->CI->db->get();
+
+        return $query->result_array();
+    }
+
     //tested
     /**
      * create topic
@@ -97,16 +119,15 @@ class My_forum {
      * @param $t_by
      * @return bool
      */
-    public function create_topic($t_subj, $t_cat, $t_by ) {
+    public function create_topic($t_subj, $t_cat, $t_by) {
 
         $valid = true;
 
         if (!$valid) {
             return false; }
-
         $data = array(
             'topic_subject' => $t_subj,
-            'topic_date' => NOW(),
+            'topic_date' => date("Y-m-d H:i:s"),
             'topic_cat' => $t_cat,
             'topic_by' => $t_by
         );
@@ -133,7 +154,7 @@ class My_forum {
 
         $data = array(
             'posts_content' => $p_content,
-            'posts_date' => NOW(),
+            'posts_date' => date("Y-m-d H:i:s"),
             'posts_topic' => $p_topic,
             'posts_by' => $p_by
         );
@@ -178,6 +199,23 @@ class My_forum {
 
     }
 
+    public function get_topic_post($id = FALSE) {
+
+        if ($id == FALSE)
+            $id = $this->CI->session->userdata('id');
+
+        $query = $this->CI->db->where('topic_id', $id);
+        $query = $this->CI->db->get('topics');
+
+        if ($query->num_rows() <= 0){
+            $this->error($this->CI->lang->line('no_user'));
+            return FALSE;
+        }
+        return $query->row();
+    }
+
+
+
     /**
      * view topics created
      * @param $id_topic
@@ -210,14 +248,14 @@ class My_forum {
 
     }
 
-    public function view_post($post_topic, $limit = FALSE, $offset = FALSE) {
+    public function view_post($id_topic, $limit = FALSE, $offset = FALSE) {
 
         // if group_par is given
 
         $this->CI->db->select('*')
             ->from("posts")
-            ->join('aauth_users', 'posts.posts_by = aauth_users.id')
-            ->where('post_topic', $post_topic);
+            ->join('aauth_users', 'posts.post_by = aauth_users.id')
+            ->where('post_topic', $id_topic);
         // limit
         if ($limit) {
 
