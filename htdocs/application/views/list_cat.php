@@ -9,16 +9,19 @@
                 <th>Last Topics</th>
             </tr>
 
-            <tr>
+
                 <?php
                 if (isset($info))
                     foreach ($info as $inf)
                     {
-                    echo '<th>'.anchor("Forum/list_topic/".$inf["cat_id"], $inf["cat_name"]).'<br>'.$inf["cat_description"].'</th>';
+                        echo '  <tr>';
+                    echo '<td>'.anchor("Forum/list_topic/".$inf["cat_id"], $inf["cat_name"]).'<br>'.$inf["cat_description"].'</td>';
+                        echo "<td>NO</td>";
+                        echo '   </tr>';
                     }
                 ?>
-                <th>NO</th>
-            </tr>
+
+
         </table>
     </div>
 
