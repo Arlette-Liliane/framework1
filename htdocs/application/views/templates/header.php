@@ -63,9 +63,7 @@
                     <a href="<?php echo site_url("Home");?>">Home</a>
                 </li>
                
-                <li>
-                    <a href="<?php echo site_url("Contact");?>">Contact</a>
-                </li>
+
                 <li class="dropdown">
                     <a href="<?php echo site_url("Users/profile");?>" class="dropdown-toggle" data-toggle="dropdown" class="alert-success"> <?php  echo ($this->session->userdata('name')) ? 'Welcome '.$this->session->userdata('name') : 'Invité';?><b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -82,18 +80,43 @@
 
                     </ul>
                 </li>
+
+                 <li>
+                                    <a href="<?php echo site_url("Contact");?>">Contact</a>
+                  </li>
+
+                  <li class="dropdown">
+                                    <a href="<?php echo site_url("Forum");?>" class="dropdown-toggle" data-toggle="dropdown" class="alert-success"> <?php  echo ($this->session->userdata('name')) ? 'FORUM <b class="caret"></b>' : '';?> </a>
+                                    <ul class="dropdown-menu">
+                                        <?php echo ($this->aauth->is_admin($this->session->userdata('id'))) ?
+                                        '<li>
+                                             <a href="'.site_url('Forum/create_cat').'"><i class="fa fa-fw fa-sign-in"></i>Create Category</a>
+                                             </li>' : ''; ?>
+
+
+                                        <?php
+                                            echo ($this->session->userdata('name')) ?
+                                                    '<li>
+                                                        <a href="'.site_url("Forum/create_topic").'"> Create Topic</a>
+                                                    </li>' : '';?>
+
+
+                                        <?php
+                                                 echo ($this->session->userdata('name')) ?
+                                                 '<li>
+                                                     <a href="'.site_url("Forum/create_ticket").'"> Create Ticket</a>
+                                                 </li>' : '';?>
+
+
+                                    </ul>
+                                </li>
+
                 <?php
                 echo ($this->aauth->is_admin($this->session->userdata('id'))) ?
                     '<li>
                                         <a href="'.site_url("Users/list_users").'"> <i class="fa fa-fw fa-power-off"></i> Users List</a>
-                                    </li>' : '';
+                                    </li>' : '';?>
 
-
-                    echo ($this->session->userdata('name')) ?
-                    '<li>
-                                        <a href="'.site_url("Forum").'"> <i class="fa fa-fw fa-power-off"></i> Forum</a>
-                                    </li>' : ''
- ?>
 
             </ul>
         </div>
