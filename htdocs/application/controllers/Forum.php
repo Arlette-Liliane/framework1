@@ -18,8 +18,7 @@ class Forum extends CI_Controller
     }
     public function index()
     {
-        $data["contents"] = "Forum";
-        $this->load->view('templates/template', $data);
+        redirect("Forum/list_cat");
     }
 
     public function create_cat()
@@ -65,7 +64,7 @@ class Forum extends CI_Controller
 
             if ($a) {
                 print "<script type=\"text/javascript\">alert('this category has been created');</script>";
-                redirect("Forum");
+                redirect("Forum/list_cat");
 
             }
 
@@ -99,8 +98,24 @@ class Forum extends CI_Controller
 
     public function  post_topic($id_topic)
     {
-        $data = $this->my_forum->view_post($id_topic);
-        $data["name"] = $this->my_forum->get_topic_post($id_topic);
+        $data["tab"] = $this->my_forum->view_post($id_topic);
+        $data["topic"] = $this->my_forum->get_topic_post($id_topic);
+        $this->form_validation->set_rules('message', 'Message', 'trim|required|xss_clean');
+        if ($this->form_validation->run()) {
+            $a = $this->my_forum-> create_post($this->input->post("message"),
+                $id_topic,
+                $this->session->userdata('id'));
+            if ($a) {
+                print "<script type=\"text/javascript\">alert('this category has been created');</script>";
+                redirect("Forum/post_topic/".$id_topic);
+
+            }
+
+            else {
+                print "<script type=\"text/javascript\">alert('Error Please try again');</script>";
+            }
+
+        }
         $this->my_forum->template_view("view_topic", $data);
 
     }

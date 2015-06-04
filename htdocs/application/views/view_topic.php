@@ -4,32 +4,33 @@
             <div class="col-lg-12">
 
 
-                <table class="table table-bordered">
-                    <tr>
-                        <!-- avoir le nom du topic pour les reponse mis dans name  -->
-                        <th class="alert-danger"><?php echo $info['name']->topic_subject; ?></th>
-                    </tr>
 
-                        <?php //var_dump($info["name"]);
-                            if (!isset($info)) {
-                                foreach ($info as $inf) {
-                                    echo ' <tr>';
-                                    echo '<td>' . $inf["post_date"] . 'by</td>';
-                                    echo '<td>' . $inf["post_content"] . '</td>';
+<?php
 
-                                    echo '  </tr>';
 
-                                }
-                            }
-                        else {
-                            echo '<h2 class="intro-text text-center"> <p class="text-warning">Forbidden <strong>You dont have enough right :( </strong></p></h2>';
+echo '<table class="table table-bordered table-condensed table-body-center" >';
+
+echo '<tr><td class="alert-danger" colspan=2>'; //print_r($info['tab']);
+echo $info['topic']->topic_subject;
+echo '</td></tr>';
+
+
+
+                       //var_dump($info["name"]);
+
+                        foreach ($info['tab'] as $inf) {
+                            echo ' <tr>';
+                            echo '<td>' . $inf["name"] . ' <br>'.$inf["post_date"] . '</td>';
+                            echo '<td>' . $inf["post_content"] . '</td>';
+                            echo '  </tr>';
                         }
-                            ?>
 
-                </table>
-                <?php echo form_open('Forum/post_topic',[ 'role' => 'form', 'id' => 'myform']);
-                echo (isset($info)) ?  '<label>Post in : </label>' : '<label>Reply to : </label>';?>
-                <textarea class="form-control" rows="3"></textarea>
+
+echo '</table>';
+                 echo form_open('Forum/post_topic/'.$info['topic']->topic_id,[ 'role' => 'form', 'id' => 'myform']);
+                echo (isset($info)) ?  '<label>Post in : </label>' : '<label>Reply to : </label>';
+                echo form_error('message','<div class="alert alert-danger">', '</div>');?>
+                <textarea class="form-control"  name="message" rows="3"></textarea>
                 <input type="submit" value="Submit reply" />
                 </form>
 

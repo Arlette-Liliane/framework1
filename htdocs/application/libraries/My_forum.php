@@ -153,10 +153,10 @@ class My_forum {
             return false; }
 
         $data = array(
-            'posts_content' => $p_content,
-            'posts_date' => date("Y-m-d H:i:s"),
-            'posts_topic' => $p_topic,
-            'posts_by' => $p_by
+            'post_content' => $p_content,
+            'post_date' => date("Y-m-d H:i:s"),
+            'post_topic' => $p_topic,
+            'post_by' => $p_by
         );
 
         if ( $this->CI->db->insert("posts", $data ))
