@@ -199,10 +199,11 @@ class My_forum {
 
     }
 
+
+
     public function get_topic_post($id = FALSE) {
 
-        if ($id == FALSE)
-            $id = $this->CI->session->userdata('id');
+
 
         $query = $this->CI->db->where('topic_id', $id);
         $query = $this->CI->db->get('topics');
@@ -212,6 +213,50 @@ class My_forum {
             return FALSE;
         }
         return $query->row();
+    }
+
+    public function get_topic($where = FALSE, $limit = FALSE, $offset = FALSE) {
+
+        // if group_par is given
+
+        $this->CI->db->select('topic_id')
+            ->from("topics");
+        // limit
+        if ($limit) {
+
+            if ($offset == FALSE)
+                $this->CI->db->limit($limit);
+            else
+                $this->CI->db->limit($limit, $offset);
+        }
+        if ($where)
+            $this->CI->db->where('topic_subject', $where);
+
+        $query = $this->CI->db->get();
+
+        return $query->result_array();
+    }
+
+    public function get_topic_all($where = FALSE, $limit = FALSE, $offset = FALSE) {
+
+        // if group_par is given
+
+        $this->CI->db->select('*')
+            ->from("topics");
+        // limit
+        if ($limit) {
+
+            if ($offset == FALSE)
+                $this->CI->db->limit($limit);
+            else
+                $this->CI->db->limit($limit, $offset);
+        }
+        if ($where)
+            $this->CI->db->where('topic_id', $where);
+
+        $query = $this->CI->db->get();
+
+        return $query->result_array();
     }
 
 
@@ -273,6 +318,40 @@ class My_forum {
 
     }
 
+    public function update_topic($id_topic, $subj, $topic_cat, $by) {
+
+        // if group_par is given
+
+        $data['topic_date'] = date("Y-m-d H:i:s");
+        $data['topic_subject'] = $subj;
+        $data["topic_cat"] = $topic_cat;
+        $data["topic_by"] = $by;
+
+        $query = $this->CI->db->where('topic_id',$id_topic);
+        return $this->CI->db->update('topics', $data);
+
+    }
+
+    public function update_post($id_post, $subj, $topic_cat, $by) {
+
+        // if group_par is given
+
+        $data['post_date'] = date("Y-m-d H:i:s");
+        $data['post_content'] = $subj;
+        $data["post_topic"] = $topic_cat;
+        $data["post_by"] = $by;
+        //modifit ou les valeurs ou le id du post est egale
+        $query = $this->CI->db->where('post_id',$id_post);
+        return $this->CI->db->update('posts', $data);
+
+    }
+
+
+    public function delete_topic($id)
+    {
+        $this->CI->db->where('topic_id', $id);
+        return $this->CI->db->delete('topics');
+    }
 }
 
 

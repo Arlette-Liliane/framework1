@@ -97,7 +97,7 @@
                                         <?php
                                             echo ($this->session->userdata('name')) ?
                                                     '<li>
-                                                        <a href="'.site_url("Forum/create_topic").'"> Create Topic</a>
+                                                        <a href="'.site_url("Forum/list_cat").'"> list cat</a>
                                                     </li>' : '';?>
 
 
