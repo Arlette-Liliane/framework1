@@ -9,12 +9,12 @@
                     <li class="active">Post</li>
                 </ol>
 
-<?php
+<?php //var_dump($info);
 
 
 echo '<table class="table table-bordered table-condensed table-body-center" >';
 
-echo '<tr><td class="alert-danger" colspan=2>'; //print_r($info);
+echo '<tr><td class="alert-danger" colspan=3>'; //print_r($info);
 echo $info['topic']->topic_subject;
 echo '</td></tr>';
 
@@ -26,6 +26,11 @@ echo '</td></tr>';
                             echo ' <tr>';
                             echo '<td>' . $inf["name"] . ' <br>'.$inf["post_date"] . '</td>';
                             echo '<td>' . $inf["post_content"] . '</td>';
+                            if ($inf['post_by'] === $this->session->userdata('id') || $this->aauth->is_admin($this->session->userdata('id')))
+                                echo '<td><a href="'.site_url("Forum/modify_post/".$inf['post_id']).'" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                <a href="'.site_url("Forum/delete_post/".$inf['post_id']).'" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+
+                                </td>';
                             echo '  </tr>';
                         }
 

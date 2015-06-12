@@ -259,6 +259,27 @@ class My_forum {
         return $query->result_array();
     }
 
+    public function get_post($where = FALSE, $limit = FALSE, $offset = FALSE) {
+
+        // if group_par is given
+
+        $this->CI->db->select('*')
+            ->from("posts");
+        // limit
+        if ($limit) {
+
+            if ($offset == FALSE)
+                $this->CI->db->limit($limit);
+            else
+                $this->CI->db->limit($limit, $offset);
+        }
+        if ($where)
+            $this->CI->db->where('post_id', $where);
+
+        $query = $this->CI->db->get();
+
+        return $query->result_array();
+    }
 
 
     /**
@@ -351,6 +372,47 @@ class My_forum {
     {
         $this->CI->db->where('topic_id', $id);
         return $this->CI->db->delete('topics');
+    }
+
+
+
+    public function update_cat($id_cat, $subj, $description) {
+
+        // if group_par is given
+
+
+        $data['cat_description'] = $description;
+        $data["cat_name"] = $subj;
+
+        //modifit ou les valeurs ou le id du post est egale
+        $query = $this->CI->db->where('cat_id',$id_cat);
+        return $this->CI->db->update('categories', $data);
+
+    }
+
+    public function delete_cat($id)
+    {
+        $this->CI->db->where('cat_id', $id);
+        return $this->CI->db->delete('categories');
+    }
+
+    public function update_post2($id_post, $subj) {
+
+        // if group_par is given
+
+        $data['post_date'] = date("Y-m-d H:i:s");
+        $data['post_content'] = $subj;
+
+        //modifit ou les valeurs ou le id du post est egale
+        $query = $this->CI->db->where('post_id',$id_post);
+        return $this->CI->db->update('posts', $data);
+
+    }
+
+    public function delete_post($id)
+    {
+        $this->CI->db->where('post_id', $id);
+        return $this->CI->db->delete('posts');
     }
 }
 
